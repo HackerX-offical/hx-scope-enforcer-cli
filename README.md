@@ -1,52 +1,68 @@
 # hx-scope-enforcer-cli
 
-**Authorized engagement scope validation** for bug bounty, pentest, and red-team prep.
-Every scan pipeline should fail closed when a target is out of scope.
+**Authorized engagement scope validation** — parse scope files, check single targets,
+and filter host lists before recon or scanning.
+
+## Why this exists
+
+Bug bounty and pentest rules of engagement define in-scope hosts, CIDRs, and wildcards.
+Running tools against out-of-scope assets is a compliance failure. This CLI loads a
+scope file, validates syntax, and gates targets so pipelines fail fast when a line is
+not allowed.
+
+## Features
+
+- `init` — Write an example `scope.txt` without overwriting existing files
+- `validate` — Parse and confirm scope file syntax
+- `check` — Single target in/out of scope (`--json` optional)
+- `filter` — Split a newline-delimited list; optional `-o` in-scope output file
+- Exit `2` when target is out of scope or filter finds out-of-scope lines
 
 ## Install
 
 ```bash
+git clone https://github.com/HackerX-offical/hx-scope-enforcer-cli.git
+cd hx-scope-enforcer-cli
 npm install
 npm run build
 npm link   # optional: global hx-scope
 ```
 
-## Usage
+## Quick start
 
 ```bash
-# Create a starter scope file
-hx-scope init ./engagement-scope.txt
-
-# Validate syntax
-hx-scope validate -f ./engagement-scope.txt
-
-# Check one target (exit 0 = in scope, 2 = out of scope)
-hx-scope check https://api.staging.example.com -f ./engagement-scope.txt
-
-# Filter a host list
-hx-scope filter -f ./engagement-scope.txt -i targets.txt -o in-scope.txt
+hx-scope init scope.txt
+hx-scope validate -f scope.txt
+hx-scope check api.example.com -f scope.txt
+hx-scope filter -f scope.txt -i targets.txt -o in-scope.txt
 ```
 
-### Scope file format
+## Output
 
-```
-# comments allowed
-example.com
-*.staging.example.com
-192.168.1.10
-10.0.0.0/8
-```
-
-## Ethics
-
-Use only against systems you are **explicitly authorized** to test. See
-[SECURITY.md](./SECURITY.md).
+| Mode     | Description                                                                      |
+| -------- | -------------------------------------------------------------------------------- |
+| Default  | Green/red IN SCOPE / OUT OF SCOPE messages; filter lists both buckets            |
+| `--json` | Structured `{ inScope, matchedRule, … }` or filter `{ inScope[], outOfScope[] }` |
+| Exit `2` | Out-of-scope target or filter had rejected lines                                 |
 
 ## Develop
 
 ```bash
+npm run format
+npm run build
 npm test
+npm run test:integration   # optional fixture scope files
+npm run format:check
 ```
+
+## Architecture
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for module layout and extension points.
+
+## Ethics
+
+Use only on systems and content you are **authorized** to test. See
+[SECURITY.md](./SECURITY.md).
 
 ## License
 
