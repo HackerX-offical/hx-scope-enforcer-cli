@@ -1,9 +1,4 @@
-import {
-  filterTargets,
-  isTargetInScope,
-  normalizeTarget,
-  parseScopeFile,
-} from '../src/scope.js';
+import { filterTargets, isTargetInScope, normalizeTarget, parseScopeFile } from '../src/scope.js';
 
 describe('normalizeTarget', () => {
   it('strips URL scheme and path', () => {
@@ -48,9 +43,7 @@ example.com
 
   it('does not match parent when only subdomain wildcard', () => {
     expect(isTargetInScope('staging.example.com', entries).inScope).toBe(false);
-    expect(isTargetInScope('app.staging.example.com', entries).inScope).toBe(
-      true,
-    );
+    expect(isTargetInScope('app.staging.example.com', entries).inScope).toBe(true);
   });
 
   it('matches CIDR', () => {

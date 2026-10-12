@@ -12,8 +12,7 @@ export interface ScopeFile {
   errors: string[];
 }
 
-const HOST_RE =
-  /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
+const HOST_RE = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
 const WILDCARD_RE = /^\*\.(.+)$/;
 
 export function parseScopeLine(line: string, lineNo: number): ScopeEntry | string {
@@ -108,10 +107,7 @@ export interface ScopeMatchResult {
   target: string;
 }
 
-export function isTargetInScope(
-  target: string,
-  entries: ScopeEntry[],
-): ScopeMatchResult {
+export function isTargetInScope(target: string, entries: ScopeEntry[]): ScopeMatchResult {
   const normalized = normalizeTarget(target);
   if (!normalized) {
     return { inScope: false, target: normalized };

@@ -3,12 +3,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Command } from 'commander';
 import chalk from 'chalk';
-import {
-  EXAMPLE_SCOPE,
-  filterTargets,
-  isTargetInScope,
-  parseScopeFile,
-} from './scope.js';
+import { EXAMPLE_SCOPE, filterTargets, isTargetInScope, parseScopeFile } from './scope.js';
 
 const program = new Command();
 
@@ -99,43 +94,34 @@ program
   .requiredOption('-i, --input <path>', 'targets file (one per line)')
   .option('-o, --output <path>', 'write in-scope targets here')
   .option('--json', 'JSON output')
-  .action(
-    (
-      opts: {
-        file: string;
-        input: string;
-        output?: string;
-        json?: boolean;
-      },
-    ) => {
-      const { entries } = loadScope(opts.file);
-      const inputPath = resolve(opts.input);
-      if (!existsSync(inputPath)) {
-        console.error(chalk.red(`Input file not found: ${inputPath}`));
-        process.exit(1);
-      }
-      const lines = readFileSync(inputPath, 'utf8')
-        .split(/\r?\n/)
-        .map((l) => l.trim())
-        .filter(Boolean);
-      const { inScope, outOfScope } = filterTargets(lines, entries);
+  .action((opts: { file: string; input: string; output?: string; json?: boolean }) => {
+    const { entries } = loadScope(opts.file);
+    const inputPath = resolve(opts.input);
+    if (!existsSync(inputPath)) {
+      console.error(chalk.red(`Input file not found: ${inputPath}`));
+      process.exit(1);
+    }
+    const lines = readFileSync(inputPath, 'utf8')
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean);
+    const { inScope, outOfScope } = filterTargets(lines, entries);
 
-      if (opts.json) {
-        console.log(JSON.stringify({ inScope, outOfScope }, null, 2));
-      } else {
-        console.log(chalk.bold(`In scope (${inScope.length}):`));
-        inScope.forEach((t) => console.log(`  ${chalk.green(t)}`));
-        console.log(chalk.bold(`Out of scope (${outOfScope.length}):`));
-        outOfScope.forEach((t) => console.log(`  ${chalk.red(t)}`));
-      }
+    if (opts.json) {
+      console.log(JSON.stringify({ inScope, outOfScope }, null, 2));
+    } else {
+      console.log(chalk.bold(`In scope (${inScope.length}):`));
+      inScope.forEach((t) => console.log(`  ${chalk.green(t)}`));
+      console.log(chalk.bold(`Out of scope (${outOfScope.length}):`));
+      outOfScope.forEach((t) => console.log(`  ${chalk.red(t)}`));
+    }
 
-      if (opts.output) {
-        writeFileSync(resolve(opts.output), inScope.join('\n') + '\n', 'utf8');
-        console.log(chalk.dim(`Wrote in-scope list to ${opts.output}`));
-      }
+    if (opts.output) {
+      writeFileSync(resolve(opts.output), inScope.join('\n') + '\n', 'utf8');
+      console.log(chalk.dim(`Wrote in-scope list to ${opts.output}`));
+    }
 
-      process.exit(outOfScope.length > 0 ? 2 : 0);
-    },
-  );
+    process.exit(outOfScope.length > 0 ? 2 : 0);
+  });
 
 program.parse();

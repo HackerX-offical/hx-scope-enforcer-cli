@@ -1,6 +1,7 @@
 # hx-scope-enforcer-cli
 
-**Authorized engagement scope validation** for bug bounty, pentest, and red-team prep. Every scan pipeline should fail closed when a target is out of scope.
+**Authorized engagement scope validation** for bug bounty, pentest, and red-team prep.
+Every scan pipeline should fail closed when a target is out of scope.
 
 ## Install
 
@@ -38,7 +39,8 @@ example.com
 
 ## Ethics
 
-Use only against systems you are **explicitly authorized** to test. See [SECURITY.md](./SECURITY.md).
+Use only against systems you are **explicitly authorized** to test. See
+[SECURITY.md](./SECURITY.md).
 
 ## Develop
 
