@@ -48,8 +48,6 @@ Use only against systems you are **explicitly authorized** to test. See
 npm test
 ```
 
-MIT — [HackerX Official](https://github.com/HackerX-offical)
-
 ## License
 
 Licensed under the [HackerX License](./LICENSE). Redistributions must retain copyright,
