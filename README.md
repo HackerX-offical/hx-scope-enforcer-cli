@@ -21,7 +21,7 @@ not allowed.
 ## Install
 
 ```bash
-git clone https://github.com/HackerX-offical/hx-scope-enforcer-cli.git
+git clone https://github.com/HackerX-official/hx-scope-enforcer-cli.git
 cd hx-scope-enforcer-cli
 npm install
 npm run build
